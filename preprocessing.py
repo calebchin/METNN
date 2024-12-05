@@ -36,7 +36,7 @@ def get_empirical (table):
 
     #Convert empirical into dict, access edges to multiply by L using descendants
 
-    return empirical
+  return empirical
   
 
 """
@@ -69,7 +69,8 @@ def empirical_dist_edge_len (tree, table):
       for i in range(num_samples):
         tot = 0
         for OTU in descendants:
-          tot+=empirical_dist[i][OTU]         
+          if OTU in empirical_dist[i]:
+            tot+=empirical_dist[i][OTU]         
         dists[i].append(tot)
 
     else:

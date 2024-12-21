@@ -138,6 +138,11 @@ Parameters:
 - tree (Bio.Phylo.BaseTree.Tree): A parsed Newick tree.
 - table: BIOM feature table
 - selected_samples: List of sample indices into the feature table to process
+
+Returns:
+- sorted_abundances: List of lists of empirical distributions for each edge in the tree for each sample
+- sorted_lengths: List of branch lengths for each edge in the tree
+- sorted_edges: List of tuples representing the paired nodes for each edge in the tree
 """
 def get_distributions(tree, table, selected_samples):
   empirical_dist = get_empirical_subset(table, selected_samples)
@@ -177,15 +182,23 @@ def get_distributions(tree, table, selected_samples):
   for i in range(num_samples):
     if 0 in abundances[i]:
           del abundances[i][0]
-    abundances[i].default_factory = None # immutable dict
   if 0 in lengths:
       del lengths[0]
   if 0 in edges:
       del edges[0]
-  lengths.default_factory = None
-  edges.default_factory = None
+
+  sorted_keys = sorted(lengths.keys())
+    
+  sorted_abundances = []
+  for i in range(num_samples):
+      sorted_abundances.append(np.array([abundances[i][key] for key in sorted_keys]))
   
-  return abundances, lengths, edges
+  sorted_lengths = np.array([lengths[key] for key in sorted_keys])
+  sorted_edges = np.array([edges[key] for key in sorted_keys])
+    
+  return sorted_abundances, sorted_lengths, sorted_edges
+  
+
 
 
 

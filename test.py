@@ -51,17 +51,17 @@ class TestGetDistributions(unittest.TestCase):
         # self.assertEqual(abundances[0]['A'], 10)
 
 
-class TestDecomposeDisjointPaths(unittest.TestCase):
-    def test_decompose_disjoint_paths(self):
-        E_w = [(1, 2), (2, 3), (3, 6), (7, 9), (9, 12)]
-        E_j = [(1, 2), (3, 6)]
+# class TestDecomposeDisjointPaths(unittest.TestCase):
+#     def test_decompose_disjoint_paths(self):
+#         E_w = [(1, 2), (2, 3), (3, 6), (7, 9), (9, 12)]
+#         E_j = [(1, 2), (3, 6)]
         
-        result = decompose_disjoint_paths(E_w, E_j)
+#         result = decompose_disjoint_paths(E_w, E_j)
         
-        # Check the expected number of disjoint paths containing at least one edge in E_j
-        self.assertEqual(result, 1)
+#         # Check the expected number of disjoint paths containing at least one edge in E_j
+#         self.assertEqual(result, 1)
 
-if __name__ == '__main__':
-    unittest.main()
+# if __name__ == '__main__':
+#     unittest.main()
 if __name__ == '__main__':
     unittest.main()

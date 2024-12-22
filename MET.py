@@ -42,7 +42,7 @@ def split_er_ec(P, Q, n, c1=1.8):
             E_r.append(i)
         else:
             E_c.append(i)
-    return np.array(E_r), np.array(E_c)
+    return np.array(E_r, dtype=int), np.array(E_c, dtype=int)
 
 def partition_er(P_er, Q_er, n, c1=1.8):
     J = math.floor(np.log2(n/(c1 * np.log(n))))
@@ -58,6 +58,8 @@ def partition_er(P_er, Q_er, n, c1=1.8):
 
 def unbiased_H(P, k, n):
     ls = np.array([P - m / n for m in range(0, k)])
+    if k == 0:
+        return 1
     return np.prod(ls) 
 
 def unbiased_G(P, Q, k, n):
@@ -170,6 +172,7 @@ def moment_screening_estimator(tree, P, Q, L, n, pair_edges, c1=1.8, c2=1):
     J = math.floor(np.log2(n/(c1 * np.log(n))))
     # split edges into E_r and E_c
     inds_er, inds_ec = split_er_ec(P, Q, n, c1)
+    #print(inds_ec)
     Pc = P[inds_ec]
     Qc = Q[inds_ec]
     Lc = L[inds_ec]
@@ -221,7 +224,7 @@ def moment_screening_estimator(tree, P, Q, L, n, pair_edges, c1=1.8, c2=1):
         Z = M.variable("Z", len(h_inds), Domain.greaterThan(0.0))
         U = M.variable("U", len(k_inds), Domain.greaterThan(0.0))
         M.objective("MinimizeDeviation", ObjectiveSense.Minimize, Expr.sum(Z))
-        M.setLogHandler(sys.stdout)
+        #M.setLogHandler(sys.stdout)
         # add constraints
         # |W - W_0| <= Z -> to linearize abs val
         for i, (h1, h2) in enumerate(h_inds):
@@ -321,6 +324,8 @@ def moment_screening_estimator(tree, P, Q, L, n, pair_edges, c1=1.8, c2=1):
         D[j - 1] = D_j
 
     # TODO: add unifrac for Ec!
+    if len(Pc) == 0:
+        return np.sum(D) + D0
     est_D = np.sum(D) + D0 + UniFrac.weighted_unifrac(Pc, Qc, Lc)
     return est_D
     
